@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Play</title>
+</head>
+<body>
+<!--    TODO Bunch of card images, pass that in... -->
+<!--    <img src="${cardImage}" alt="${cardImageDesc}">-->
+<!--    <p th:text=""-->
+
+<form th:action="@{'/challenges/play/' + ${challenge.id} + '/' + ${index+1}}"
+      th:hidden="${challenge.values.length <= index} ? 'true' : 'false'">
+    <button type="submit">Next card</button>
+</form>
+
+<form th:action="@{'/challenges/submit/' + ${challenge.id}}"
+      th:hidden="${challenge.values.length > index} ? 'true' : 'false'"
+      method="post">
+    <input type="number" id="running_count" name="Running Count">
+    <button type="submit">Submit</button>
+</form>
+
+</body>
+</html>
