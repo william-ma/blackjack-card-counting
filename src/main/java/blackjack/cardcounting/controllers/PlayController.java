@@ -4,32 +4,53 @@ import blackjack.cardcounting.models.Challenge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/play")
 public class PlayController {
 
     //https://www.baeldung.com/spring-autowire
     @Autowired
     private ChallengeController challengeController;
 
-    @GetMapping("/play")
+    @GetMapping
     public String play(@RequestParam(value = "difficulty", defaultValue = "1") int difficulty,
                        Model model) {
-        return showCard(0, 0, model);
+        Challenge challenge = challengeController.newChallenge(difficulty);
+        return showCard(challenge.id(), 0, model);
     }
 
-    @GetMapping("/play/{id}")
-    public String playChallenge(@PathVariable long id, Model model) {
-        return showCard(id, 0, model);
-    }
+    @GetMapping("/{id}/{index}")
+    public String showCard(@PathVariable long id,
+                           @PathVariable int index,
+                           Model model) {
+        Challenge challenge = challengeController.getChallenge(id);
+        if (challenge != null) {
+            boolean isInBounds = index < challenge.values().length();
+            if (isInBounds) {
+                Character card = challenge.values().charAt(index);
+                System.out.println("Showing card: '" + card + "'");
+                model.addAttribute("card", card);
+            }
 
-    @GetMapping("/play/{id}/{index}")
-    public String showCard(@PathVariable long id, @PathVariable int index, Model model) {
-//        model.addAttribute("challenge", dummy);
-        model.addAttribute("index", index);
+            model.addAttribute("challenge", challenge);
+            model.addAttribute("index", index);
+            model.addAttribute("isEnd", !isInBounds);
+        }
+
         return "play";
+    }
+
+    @PostMapping("/submit/{id}")
+    public String submit(@PathVariable long id,
+                         @RequestParam(defaultValue = "1") int strategy,
+                         @RequestParam(value = "running_count") double runningCount,
+                         @RequestParam(value = "true_count", required = false) Double trueCount,
+                         Model model) {
+        boolean isCorrect = challengeController.submitChallenge(id, strategy, runningCount, trueCount);
+        model.addAttribute("isCorrect", isCorrect);
+//        model.addAttribute("isCorrect", isCorrect);
+        return "results";
     }
 }

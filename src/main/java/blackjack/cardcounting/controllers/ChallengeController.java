@@ -51,17 +51,27 @@ public class ChallengeController {
 
     @GetMapping("/new")
     public Challenge newChallenge(@RequestParam(value = "difficulty", defaultValue = "1") int difficulty) {
-        return new Challenge(counter.incrementAndGet(), difficulty, Challenge.generateValues(difficulty));
+        // TODO implement
+        //return new Challenge(counter.incrementAndGet(), difficulty, Challenge.generateValues(difficulty));
+        return dummy;
     }
 
     @GetMapping
     public List<Challenge> getChallenges() {
+        // TODO implement
         return new ArrayList<>();
     }
 
     @GetMapping("/{id}")
     public Challenge getChallenge(@PathVariable long id) {
-        return new Challenge(0, 1, "22tqj");
+        // TODO implement
+        return dummy;
+    }
+
+    @DeleteMapping("/{id}")
+    public boolean deleteChallenge(@PathVariable long id) {
+        // TODO implement
+        return true;
     }
 
 }

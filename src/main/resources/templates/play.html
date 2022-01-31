@@ -8,17 +8,28 @@
 <body>
 <!--    TODO Bunch of card images, pass that in... -->
 <!--    <img src="${cardImage}" alt="${cardImageDesc}">-->
-<!--    <p th:text=""-->
+<span th:text="!${isEnd} ? 'Card is: ' + ${card} + '<br>'"/>
 
-<form th:action="@{'/challenges/play/' + ${challenge.id} + '/' + ${index+1}}"
-      th:hidden="${challenge.values.length <= index} ? 'true' : 'false'">
+<form th:action="@{'/play/' + ${challenge.id} + '/' + ${index+1}}"
+      th:hidden="${isEnd} ? 'true' : 'false'">
     <button type="submit">Next card</button>
 </form>
 
-<form th:action="@{'/challenges/submit/' + ${challenge.id}}"
-      th:hidden="${challenge.values.length > index} ? 'true' : 'false'"
+<form th:action="@{'/play/submit/' + ${challenge.id}}"
+      th:hidden="${isEnd} ? 'false' : 'true'"
       method="post">
-    <input type="number" id="running_count" name="Running Count">
+    Running Count:<br>
+    <input type="number" name="running_count">
+    <select name="strategy">
+        <option value=1 selected>Hi-Lo</option>
+        <option value=2>Hi Opt I</option>
+        <option value=3>Hi Opt II</option>
+        <option value=4>KO</option>
+        <option value=5>Omega II</option>
+        <option value=6>Red 7</option>
+        <option value=7>Halves</option>
+        <option value=8>ZenCount</option>
+    </select>
     <button type="submit">Submit</button>
 </form>
 
