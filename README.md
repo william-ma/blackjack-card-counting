@@ -3,8 +3,9 @@
 A web app used to train and teach card counting in blackjack.
 
 Developed using:
-- [x] Java Spring Boot web framework
+- [x] Java Spring Boot (Web framework)
 - [x] MongoDB (NoSQL database)
+- [x] Gradle (Dependency management)
 
 ### Card Counting Strategies
 
