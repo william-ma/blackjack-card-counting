@@ -1,21 +1,18 @@
-# blackjack-card-counting
+## Blackjack Card Counting
 
-## To-do
+A web app used to train and teach card counting in blackjack.
 
-### Back-end
+Developed using:
+- [x] Java Spring Boot web framework
+- [x] MongoDB (NoSQL database)
 
-- [x] Implement card counting strategies
-- [ ] Delete challenges API
-- [ ] Connect to the db
-- [ ] Show error page
-- [ ] A user system
+### Card Counting Strategies
 
-### Front-end
-
-- [ ] Create simple front-end
-  - [ ] Select difficulties
-  - [ ] Dropdown/Menu for which strategy
-  - [ ] Pictures for cards
-  - [ ] Add buttons for next card
-  
-- [ ] Create Android app
+- [x] Hi-Lo
+- [x] Hi-Opt I
+- [x] Hi-Opt II
+- [x] KO
+- [x] Omega II
+- [x] Red 7
+- [x] Halves
+- [x] Zen Count
