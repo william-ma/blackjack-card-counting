@@ -50,6 +50,10 @@ public class ChallengeController {
 
     @PostMapping("/create")
     public Challenge create(@RequestParam(value = "difficulty", defaultValue = "1") int difficulty) {
+        if (difficulty < 1 || difficulty > 3) {
+            return null;
+        }
+
         String values = Challenge.generateValues(difficulty);
         return repository.save(new Challenge(values, difficulty, values));
     }

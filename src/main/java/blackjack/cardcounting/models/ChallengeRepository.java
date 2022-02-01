@@ -8,4 +8,6 @@ public interface ChallengeRepository extends MongoRepository<Challenge, String> 
 
     List<Challenge> findAll();
 
+    List<Challenge> findByDifficulty(int difficulty);
+
 }
