@@ -1,19 +1,20 @@
 package blackjack.cardcounting.controllers;
 
 import blackjack.cardcounting.models.Challenge;
+import blackjack.cardcounting.models.ChallengeRepository;
 import blackjack.cardcounting.strategies.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.*;
 import java.util.function.Function;
 
 @RestController
 @RequestMapping("/api/challenges")
 public class ChallengeController {
+
+    @Autowired
+    private ChallengeRepository repository;
 
     private static final Map<Integer, Function<String, Double>> strategyMap = Map.ofEntries(
             new AbstractMap.SimpleEntry<>(1, s -> new HiLo().getRunningCount(s)),
@@ -26,52 +27,50 @@ public class ChallengeController {
             new AbstractMap.SimpleEntry<>(8, s -> new ZenCount().getRunningCount(s))
     );
 
-    // TODO: initlalize with latest challenge?
-    // https://www.roboleary.net/java/2020/06/03/spring-boot-api.html#create-a-class-to-start-the-application
-    private AtomicLong counter = new AtomicLong();
-
-    // TODO: Test data only! Before we implement the database
-    private final Challenge dummy = new Challenge(1, 1, "22tqj");
-
     @PostMapping(path="/submit/{id}", produces="application/json")
-    public boolean submitChallenge(@PathVariable long id,
-                                   @RequestParam(value = "strategy") int strategy,
-                                   @RequestParam(value = "running_count") double runningCount,
-                                   @RequestParam(value = "true_count", required = false) Double trueCount) {
+    public boolean submit(@PathVariable String id,
+                          @RequestParam(value = "strategy") int strategy,
+                          @RequestParam(value = "running_count") double runningCount,
+                          @RequestParam(value = "true_count", required = false) Double trueCount) {
 
         if (strategyMap.containsKey(strategy)) {
-            // TODO: Get challenge
-            double ourRunningCount = strategyMap.get(strategy).apply(dummy.values());
-            return (Math.abs(ourRunningCount - runningCount) < 0.0001);
+            try {
+                Challenge challenge = repository.findById(id).orElseThrow();
+                double ourRunningCount = strategyMap.get(strategy).apply(challenge.values());
+                return (Math.abs(ourRunningCount - runningCount) < 0.0001);
+            } catch (NoSuchElementException e) {
+                System.err.println("ERROR: Cannot find challenge id: " + id);
+                return false;
+            }
         } else {
             System.err.println("ERROR: Cannot find strategy");
             return false ;
         }
     }
 
-    @GetMapping("/new")
-    public Challenge newChallenge(@RequestParam(value = "difficulty", defaultValue = "1") int difficulty) {
-        // TODO implement
-        //return new Challenge(counter.incrementAndGet(), difficulty, Challenge.generateValues(difficulty));
-        return dummy;
+    @PostMapping("/create")
+    public Challenge create(@RequestParam(value = "difficulty", defaultValue = "1") int difficulty) {
+        String values = Challenge.generateValues(difficulty);
+        return repository.save(new Challenge(values, difficulty, values));
     }
 
     @GetMapping
-    public List<Challenge> getChallenges() {
-        // TODO implement
-        return new ArrayList<>();
+    public List<Challenge> all() {
+        return repository.findAll();
     }
 
     @GetMapping("/{id}")
-    public Challenge getChallenge(@PathVariable long id) {
-        // TODO implement
-        return dummy;
+    public Challenge get(@PathVariable String id) {
+        try {
+            return repository.findById(id).orElseThrow();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteChallenge(@PathVariable long id) {
-        // TODO implement
-        return true;
+    public void delete(@PathVariable String id) {
+        repository.deleteById(id);
     }
 
 }

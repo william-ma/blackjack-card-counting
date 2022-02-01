@@ -17,15 +17,15 @@ public class PlayController {
     @GetMapping
     public String play(@RequestParam(value = "difficulty", defaultValue = "1") int difficulty,
                        Model model) {
-        Challenge challenge = challengeController.newChallenge(difficulty);
+        Challenge challenge = challengeController.create(difficulty);
         return showCard(challenge.id(), 0, model);
     }
 
     @GetMapping("/{id}/{index}")
-    public String showCard(@PathVariable long id,
+    public String showCard(@PathVariable String id,
                            @PathVariable int index,
                            Model model) {
-        Challenge challenge = challengeController.getChallenge(id);
+        Challenge challenge = challengeController.get(id);
         if (challenge != null) {
             boolean isInBounds = index < challenge.values().length();
             if (isInBounds) {
@@ -43,12 +43,12 @@ public class PlayController {
     }
 
     @PostMapping("/submit/{id}")
-    public String submit(@PathVariable long id,
+    public String submit(@PathVariable String id,
                          @RequestParam(defaultValue = "1") int strategy,
                          @RequestParam(value = "running_count") double runningCount,
                          @RequestParam(value = "true_count", required = false) Double trueCount,
                          Model model) {
-        boolean isCorrect = challengeController.submitChallenge(id, strategy, runningCount, trueCount);
+        boolean isCorrect = challengeController.submit(id, strategy, runningCount, trueCount);
         model.addAttribute("isCorrect", isCorrect);
 //        model.addAttribute("isCorrect", isCorrect);
         return "results";

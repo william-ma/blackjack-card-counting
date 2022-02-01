@@ -1,6 +1,8 @@
 package blackjack.cardcounting.models;
 
-public record Challenge(long id, int difficulty, String values) {
+import org.springframework.data.annotation.Id;
+
+public record Challenge(@Id String id, int difficulty, String values) {
 
     /**
      * Helper function to generate card values randomly.
