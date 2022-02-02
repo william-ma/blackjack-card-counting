@@ -17,7 +17,7 @@ public class PlayController {
     @GetMapping
     public String play(@RequestParam(value = "difficulty", defaultValue = "1") int difficulty,
                        Model model) {
-        Challenge challenge = challengeController.create(difficulty);
+        Challenge challenge = challengeController.create(null, "", difficulty, null);
         return showCard(challenge.id(), 0, model);
     }
 

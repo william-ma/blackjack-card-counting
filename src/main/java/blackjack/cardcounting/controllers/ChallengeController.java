@@ -49,13 +49,30 @@ public class ChallengeController {
     }
 
     @PostMapping("/create")
-    public Challenge create(@RequestParam(value = "difficulty", defaultValue = "1") int difficulty) {
+    public Challenge create(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "desc", defaultValue = "") String description,
+            @RequestParam(value = "difficulty", defaultValue = "1") int difficulty,
+            @RequestParam(value = "values", required = false) String values
+    ) {
         if (difficulty < 1 || difficulty > 3) {
             return null;
         }
 
-        String values = Challenge.generateValues(difficulty);
-        return repository.save(new Challenge(values, difficulty, values));
+        if (values == null) {
+            values = Challenge.generateValues(difficulty);
+        } else {
+            if (repository.existsById(values)) {
+                System.err.println("This values already exists!");
+                return null;
+            }
+        }
+
+        if (name == null) {
+            name = values;
+        }
+
+        return repository.save(new Challenge(values, name, description, difficulty, values));
     }
 
     @GetMapping
