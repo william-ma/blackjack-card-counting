@@ -6,9 +6,14 @@ import org.springframework.data.annotation.Id;
 import java.util.*;
 import java.util.function.Function;
 
-public record Challenge(@Id String id, int difficulty, String values) {
+public record Challenge(@Id String id,
+                        String name,
+                        String description,
+                        int difficulty,
+                        String values) {
 
-    private static List<Character> cardValues = Arrays.asList('2', '3', '4', '5', '6', '7', '8', '9', 't', 'j', 'q', 'k', 'a');
+    private static final List<Character> cardValues = Arrays.asList(
+            '2', '3', '4', '5', '6', '7', '8', '9', 't', 'j', 'q', 'k', 'a');
 
     /**
      * Helper function to generate card values randomly.
