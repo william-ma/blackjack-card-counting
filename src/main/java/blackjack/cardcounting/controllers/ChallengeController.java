@@ -51,13 +51,16 @@ public class ChallengeController {
     @PostMapping("/create")
     public Challenge create(
             @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "desc", defaultValue = "") String description,
+            @RequestParam(value = "description", defaultValue = "") String description,
             @RequestParam(value = "difficulty", defaultValue = "1") int difficulty,
             @RequestParam(value = "values", required = false) String values
     ) {
         if (difficulty < 1 || difficulty > 3) {
             return null;
         }
+
+        // TODO Verify difficulty to values is valid
+        // TODO Verify values is valid
 
         if (values == null) {
             values = Challenge.generateValues(difficulty);
