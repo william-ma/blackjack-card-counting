@@ -3,6 +3,7 @@ package blackjack.cardcounting.controllers;
 import blackjack.cardcounting.models.Challenge;
 import blackjack.cardcounting.models.ChallengeRepository;
 import blackjack.cardcounting.strategies.*;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -108,6 +109,20 @@ public class ChallengeController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) {
         repository.deleteById(id);
+    }
+
+    @GetMapping("/get_card_images")
+    public JSONObject getCardImages() {
+        Map<String, String> jsonMap = new HashMap<>();
+        jsonMap.put("2_img_src", "a link");
+        jsonMap.put("3_img_src", "a link");
+        jsonMap.put("4_img_src", "a link");
+        jsonMap.put("5_img_src", "a link");
+        jsonMap.put("6_img_src", "a link");
+        jsonMap.put("7_img_src", "a link");
+        jsonMap.put("8_img_src", "a link");
+        jsonMap.put("9_img_src", "a link");
+        return new JSONObject(jsonMap);
     }
 
 }
