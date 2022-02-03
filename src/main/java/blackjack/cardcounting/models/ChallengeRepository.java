@@ -10,4 +10,6 @@ public interface ChallengeRepository extends MongoRepository<Challenge, String> 
 
     List<Challenge> findByDifficulty(int difficulty);
 
+    List<Challenge> findByName(String name);
+
 }

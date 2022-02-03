@@ -79,7 +79,20 @@ public class ChallengeController {
     }
 
     @GetMapping
-    public List<Challenge> all() {
+    public List<Challenge> all(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "difficulty", required = false) Integer difficulty,
+            @RequestParam(value = "values", required = false) String values
+    ) {
+        if (name != null) {
+            repository.findByName(name);
+        }
+
+        if (difficulty != null) {
+            repository.findByDifficulty(difficulty);
+        }
+
         return repository.findAll();
     }
 
